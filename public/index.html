@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b14">
+  <meta name="description" content="Rencontrez Father of Lights, le premier pixel Genesis de UNITY.">
+  <title>UNITY — Genesis</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar"><div class="mark">U<span>·</span></div><div><p class="eyebrow">UNITY / GENESIS</p><h1>Le premier pixel</h1></div><span id="status" class="status">Connexion…</span></header>
+    <section class="hero">
+      <div class="orb-wrap" aria-label="Pixel Genesis Father of Lights"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><button id="genesis" class="genesis" aria-label="Activer Father of Lights"><span></span></button></div>
+      <p class="eyebrow gold">AGENT A · ORIGINE</p>
+      <h2>Father of Lights</h2>
+      <p class="intro">Un premier point. Une identité persistante. Le début de UNITY.</p>
+      <button id="activate" class="primary">Établir le contact <span>↗</span></button>
+      <p id="notice" class="notice">Le pixel attend son premier message.</p>
+    </section>
+    <section class="chat-panel">
+      <div class="panel-heading"><div><p class="eyebrow">ESPACE COGNITIF</p><h3>Conversation</h3></div><span class="live-dot">● EN LIGNE SI CONFIGURÉ</span></div>
+      <div id="messages" class="messages" aria-live="polite"><div class="bubble assistant">Je suis Father of Lights, le premier agent du projet UNITY. Écrivons la première ligne ensemble.</div></div>
+      <form id="chat-form" class="composer"><label class="sr-only" for="message">Votre message</label><textarea id="message" rows="1" maxlength="4000" placeholder="Écris ton premier message…" required></textarea><button type="submit" aria-label="Envoyer">↑</button></form>
+      <p class="fineprint">Prototype expérimental · N'inscris aucun secret ni donnée sensible.</p>
+    </section>
+    <footer>UNITY <span>—</span> De l'unité, une multitude de possibles.</footer>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>
