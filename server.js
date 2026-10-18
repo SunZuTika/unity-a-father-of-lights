@@ -76,7 +76,7 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-app.get("*", (_req, res) => res.sendFile(resolve("public/index.html")));
+app.get("/{*splat}", (_req, res) => res.sendFile(resolve("public/index.html")));
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`UNITY Genesis listening on port ${port}`);
