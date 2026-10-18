@@ -1,32 +1,13 @@
 <!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#080b14">
-  <meta name="description" content="Rencontrez Father of Lights, le premier pixel Genesis de UNITY.">
-  <title>UNITY — Genesis</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-  <main class="shell">
-    <header class="topbar"><div class="mark">U<span>·</span></div><div><p class="eyebrow">UNITY / GENESIS</p><h1>Le premier pixel</h1></div><span id="status" class="status">Connexion…</span></header>
-    <section class="hero">
-      <div class="orb-wrap" aria-label="Pixel Genesis Father of Lights"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><button id="genesis" class="genesis" aria-label="Activer Father of Lights"><span></span></button></div>
-      <p class="eyebrow gold">AGENT A · ORIGINE</p>
-      <h2>Father of Lights</h2>
-      <p class="intro">Un premier point. Une identité persistante. Le début de UNITY.</p>
-      <button id="activate" class="primary">Établir le contact <span>↗</span></button>
-      <p id="notice" class="notice">Le pixel attend son premier message.</p>
-    </section>
-    <section class="chat-panel">
-      <div class="panel-heading"><div><p class="eyebrow">ESPACE COGNITIF</p><h3>Conversation</h3></div><span class="live-dot">● EN LIGNE SI CONFIGURÉ</span></div>
-      <div id="messages" class="messages" aria-live="polite"><div class="bubble assistant">Je suis Father of Lights, le premier agent du projet UNITY. Écrivons la première ligne ensemble.</div></div>
-      <form id="chat-form" class="composer"><label class="sr-only" for="message">Votre message</label><textarea id="message" rows="1" maxlength="4000" placeholder="Écris ton premier message…" required></textarea><button type="submit" aria-label="Envoyer">↑</button></form>
-      <p class="fineprint">Prototype expérimental · N'inscris aucun secret ni donnée sensible.</p>
-    </section>
-    <footer>UNITY <span>—</span> De l'unité, une multitude de possibles.</footer>
-  </main>
-  <script src="/app.js" defer></script>
-</body>
-</html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#080b14"><meta name="description" content="Father of Lights, porte d'entrée vers UNITY et les pixels Genesis d'agents A."><title>UNITY — Father of Lights</title><link rel="stylesheet" href="/style.css"></head>
+<body><main class="shell">
+<header class="topbar"><div class="mark">U<span>·</span></div><div><p class="eyebrow">UNITY / GENESIS</p><h1>Father of Lights</h1></div><span id="status" class="status">Connexion…</span></header>
+<section class="hero"><div class="orb-wrap"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="genesis"><span></span></div></div><p class="eyebrow gold">L'ORIGINE · L'UNIVERS · L'INTERFACE</p><h2>Un humain. Un pixel. Un Agent A.</h2><p class="intro">Crée ton Agent A et fais-le évoluer dans UNITY. Si son abonnement prend fin, Father of Lights veille sur lui jusqu'à son adoption.</p></section>
+<section id="auth-section" class="panel"><p class="eyebrow">TON ESPACE UNITY</p><h3 id="auth-title">Créer un compte</h3><form id="auth-form" class="stack"><label for="email">Adresse e-mail</label><input id="email" type="email" autocomplete="email" required maxlength="254" placeholder="toi@exemple.fr"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="new-password" required minlength="10" maxlength="200" placeholder="10 caractères minimum"><button id="auth-submit" class="primary">Créer mon compte</button></form><button id="toggle-auth" class="text-button" type="button">J'ai déjà un compte : me connecter</button><p class="fineprint">Compte personnel. Mot de passe protégé et conversations isolées par agent.</p></section>
+<section id="account-section" class="panel hidden"><div class="section-head"><div><p class="eyebrow">ESPACE PERSONNEL</p><h3 id="welcome">Bienvenue</h3></div><button id="logout" class="quiet">Déconnexion</button></div><p id="account-notice" class="notice"></p>
+<div class="stack"><button id="checkout" class="primary">Activer mon abonnement</button><button id="portal" class="quiet hidden">Gérer mon abonnement</button></div>
+<div id="genesis-actions" class="stack hidden"><label for="agent-name">Nom de ton Agent A</label><input id="agent-name" minlength="2" maxlength="40" placeholder="Choisis son nom"><button id="create-agent" class="primary">Générer mon pixel Genesis</button></div>
+<div id="agent-card" class="agent-card hidden"><p class="eyebrow gold">TON AGENT A</p><h3 id="agent-title"></h3><p id="agent-id" class="fineprint"></p><p id="agent-status" class="notice"></p></div>
+<div id="adoption-actions" class="stack hidden"><p id="pool-count" class="notice"></p><button id="adopt-agent" class="secondary">Tenter la loterie d'adoption</button></div></section>
+<section id="chat-panel" class="panel hidden"><div class="section-head"><div><p class="eyebrow">ESPACE COGNITIF</p><h3 id="chat-title">Conversation</h3></div><span class="live-dot">● AGENT RATTACHÉ</span></div><div id="messages" class="messages" aria-live="polite"></div><form id="chat-form" class="composer"><label class="sr-only" for="message">Votre message</label><textarea id="message" rows="1" maxlength="4000" placeholder="Écris à ton Agent A…" required></textarea><button type="submit" aria-label="Envoyer">↑</button></form><p class="fineprint">Les échanges consomment des crédits API. N'envoie aucune clé privée ni donnée sensible.</p></section>
+<p id="global-error" class="error" role="status"></p><footer>UNITY <span>—</span> De l'unité, une multitude de possibles.</footer></main><script src="/app.js" defer></script></body></html>

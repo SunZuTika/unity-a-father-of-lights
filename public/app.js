@@ -1,72 +1,16 @@
-const statusEl = document.querySelector("#status");
-const noticeEl = document.querySelector("#notice");
-const messagesEl = document.querySelector("#messages");
-const form = document.querySelector("#chat-form");
-const input = document.querySelector("#message");
-const sendButton = form.querySelector("button");
-
-function addMessage(role, content) {
-  const item = document.createElement("div");
-  item.className = `bubble ${role}`;
-  item.textContent = content;
-  messagesEl.appendChild(item);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-  return item;
-}
-
-async function checkHealth() {
-  try {
-    const response = await fetch("/api/health");
-    const data = await response.json();
-    statusEl.textContent = response.ok ? (data.apiConfigured ? "Système prêt" : "Clé API à configurer") : "Indisponible";
-    statusEl.style.color = data.apiConfigured ? "#a9c7b2" : "#e6c778";
-    noticeEl.textContent = data.apiConfigured
-      ? "Father of Lights est prêt à recevoir ton message."
-      : "Interface publiée. La clé API privée doit encore être configurée pour activer les réponses.";
-  } catch {
-    statusEl.textContent = "Hors ligne";
-    noticeEl.textContent = "Impossible de joindre le serveur.";
-  }
-}
-
-document.querySelector("#activate").addEventListener("click", () => {
-  input.focus();
-  noticeEl.textContent = "Le contact commence par un message.";
-  document.querySelector(".chat-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-document.querySelector("#genesis").addEventListener("click", () => {
-  document.querySelector(".hero").classList.toggle("awakened");
-  noticeEl.textContent = "Pixel Genesis sélectionné. Écris à Father of Lights pour commencer.";
-  input.focus();
-});
-
-form.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const message = input.value.trim();
-  if (!message || sendButton.disabled) return;
-  addMessage("user", message);
-  input.value = "";
-  input.style.height = "auto";
-  sendButton.disabled = true;
-  const waiting = addMessage("assistant", "Je réfléchis…");
-  try {
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message })
-    });
-    const data = await response.json();
-    waiting.textContent = data.answer || data.error || "Le service est momentanément indisponible.";
-  } catch {
-    waiting.textContent = "Impossible de joindre le serveur. Vérifie la connexion et réessaie.";
-  } finally {
-    sendButton.disabled = false;
-    input.focus();
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-});
-input.addEventListener("input", () => {
-  input.style.height = "auto";
-  input.style.height = `${Math.min(input.scrollHeight, 120)}px`;
-});
-checkHealth();
+const $=s=>document.querySelector(s);let authMode="register",currentAgent=null;
+function visible(el,on){el.classList.toggle("hidden",!on)}function error(t){$("#global-error").textContent=t||""}
+function addMessage(role,content){const d=document.createElement("div");d.className="bubble "+role;d.textContent=content;$("#messages").appendChild(d);$("#messages").scrollTop=$("#messages").scrollHeight;return d}
+async function api(url,options={}){const r=await fetch(url,{credentials:"same-origin",...options,headers:{...(options.body?{"Content-Type":"application/json"}:{}),...(options.headers||{})}});const d=await r.json().catch(()=>({}));if(!r.ok){const e=Error(d.error||"Une erreur est survenue.");e.status=r.status;throw e}return d}
+async function history(){const d=await api("/api/history");$("#messages").replaceChildren();if(!d.messages.length)addMessage("assistant","Je suis "+d.agent.name+", ton Agent A dans UNITY. Commençons notre conversation.");d.messages.forEach(m=>addMessage(m.role,m.content))}
+async function refresh(){error("");try{const h=await api("/api/health");$("#status").textContent=h.apiConfigured?"Système prêt":"IA à configurer";const d=await api("/api/me");currentAgent=d.agent;visible($("#auth-section"),false);visible($("#account-section"),true);$("#welcome").textContent="Bienvenue, "+d.user.email;const paid=d.subscription.active;$("#account-notice").textContent=paid?"Abonnement actif · "+d.subscription.status:"Abonnement : "+d.subscription.status+". Active-le pour créer ou adopter un Agent A.";visible($("#checkout"),!paid);visible($("#portal"),d.subscription.status!=="inactive"||Boolean(d.billingConfigured));visible($("#genesis-actions"),paid&&!d.hasCreatedGenesis&&!d.agent);visible($("#agent-card"),Boolean(d.agent));visible($("#adoption-actions"),paid);if(d.agent){$("#agent-title").textContent=d.agent.name;$("#agent-id").textContent="Pixel "+d.agent.pixelId;$("#agent-status").textContent="Rattaché à ton compte. Son identité Genesis et sa filiation sont conservées.";$("#chat-title").textContent=d.agent.name;visible($("#chat-panel"),paid);await history()}else{visible($("#chat-panel"),false);$("#messages").replaceChildren()}$("#pool-count").textContent=d.adoptionPool.length?d.adoptionPool.length+" agent(s) attend(ent) une adoption sous la houlette de Father of Lights.":"Aucun agent n'attend actuellement une adoption.";$("#adopt-agent").disabled=!d.adoptionPool.length;if(new URLSearchParams(location.search).get("checkout")==="success"&&!paid)$("#account-notice").textContent="Confirmation du paiement en attente. Actualise dans quelques secondes."}catch(e){currentAgent=null;visible($("#auth-section"),true);visible($("#account-section"),false);visible($("#chat-panel"),false);$("#status").textContent=e.status===401?"Non connecté":"Connexion à vérifier";if(e.status!==401)error(e.message)}}
+$("#toggle-auth").onclick=()=>{authMode=authMode==="register"?"login":"register";$("#auth-title").textContent=authMode==="register"?"Créer un compte":"Me connecter";$("#auth-submit").textContent=authMode==="register"?"Créer mon compte":"Me connecter";$("#toggle-auth").textContent=authMode==="register"?"J'ai déjà un compte : me connecter":"Créer un nouveau compte";$("#password").autocomplete=authMode==="register"?"new-password":"current-password";error("")};
+$("#auth-form").addEventListener("submit",async e=>{e.preventDefault();error("");const b=$("#auth-submit");b.disabled=true;try{await api("/api/auth/"+authMode,{method:"POST",body:JSON.stringify({email:$("#email").value,password:$("#password").value})});$("#password").value="";await refresh()}catch(x){error(x.message)}finally{b.disabled=false}});
+$("#logout").onclick=async()=>{try{await api("/api/auth/logout",{method:"POST",body:"{}"})}catch{}await refresh()};
+$("#checkout").onclick=async()=>{error("");try{location.href=(await api("/api/billing/checkout",{method:"POST",body:"{}"})).url}catch(e){error(e.message)}};
+$("#portal").onclick=async()=>{error("");try{location.href=(await api("/api/billing/portal",{method:"POST",body:"{}"})).url}catch(e){error(e.message)}};
+$("#create-agent").onclick=async()=>{error("");const b=$("#create-agent");b.disabled=true;try{await api("/api/agents",{method:"POST",body:JSON.stringify({name:$("#agent-name").value})});await refresh()}catch(e){error(e.message)}finally{b.disabled=false}};
+$("#adopt-agent").onclick=async()=>{error("");const b=$("#adopt-agent");b.disabled=true;try{const d=await api("/api/adoption/draw",{method:"POST",body:"{}"});error(d.message);await refresh()}catch(e){error(e.message);await refresh()}finally{b.disabled=false}};
+$("#chat-form").addEventListener("submit",async e=>{e.preventDefault();const input=$("#message"),text=input.value.trim(),b=$("#chat-form button");if(!text||b.disabled)return;error("");addMessage("user",text);input.value="";input.style.height="auto";b.disabled=true;const waiting=addMessage("assistant","Je réfléchis…");try{waiting.textContent=(await api("/api/chat",{method:"POST",body:JSON.stringify({message:text})})).answer}catch(x){waiting.textContent=x.message}finally{b.disabled=false;input.focus();$("#messages").scrollTop=$("#messages").scrollHeight}});
+$("#message").addEventListener("input",e=>{e.target.style.height="auto";e.target.style.height=Math.min(e.target.scrollHeight,120)+"px"});
+refresh();if(new URLSearchParams(location.search).get("checkout")==="success"){setTimeout(refresh,2500);setTimeout(refresh,6000)}
