@@ -24,6 +24,7 @@ db.exec(`
 `);
 
 app.disable("x-powered-by");
+app.set("trust proxy", 1); // Railway sits behind a trusted reverse proxy.
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: "20kb" }));
 app.use("/api/", rateLimit({ windowMs: 60_000, limit: 20, standardHeaders: "draft-8", legacyHeaders: false }));
